@@ -7,6 +7,9 @@ import { CategoryTabs } from "@/components/CategoryTabs";
 import { MenuCard } from "@/components/MenuCard";
 import { MenuDetailSheet } from "@/components/MenuDetailSheet";
 import { AdminPanel } from "@/components/AdminPanel";
+import { WaitlistButton } from "@/components/WaitlistButton";
+import { WaitlistDialog } from "@/components/WaitlistDialog";
+import { WaitlistManagement } from "@/components/WaitlistManagement";
 
 const CATEGORIES: MenuCategory[] = ["대표", "세트", "단품", "주류", "추가"];
 
@@ -19,6 +22,9 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [editingMenu, setEditingMenu] = useState<Menu | null>(null);
+  const [isWaitlistDialogOpen, setIsWaitlistDialogOpen] = useState(false);
+  const [isWaitlistManagementOpen, setIsWaitlistManagementOpen] =
+    useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -112,7 +118,23 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 bg-background border-b shadow-sm">
         <div className="container mx-auto px-4 py-4">
-          <h1 className="text-3xl font-bold text-center">꽃돼지 숯가마</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold flex-1 text-center">
+              꽃돼지 숯가마
+            </h1>
+            <div className="flex-shrink-0">
+              <WaitlistButton
+                onClick={() => {
+                  if (isAdmin) {
+                    setIsWaitlistManagementOpen(true);
+                  } else {
+                    setIsWaitlistDialogOpen(true);
+                  }
+                }}
+                isAdmin={isAdmin}
+              />
+            </div>
+          </div>
         </div>
       </header>
 
@@ -163,6 +185,19 @@ export default function Home() {
         onMenuUpdate={handleMenuUpdate}
         editingMenu={editingMenu}
         onEditingMenuChange={setEditingMenu}
+      />
+
+      <WaitlistDialog
+        open={isWaitlistDialogOpen}
+        onOpenChange={setIsWaitlistDialogOpen}
+        onSuccess={() => {
+          // 대기 등록 성공 시 처리
+        }}
+      />
+
+      <WaitlistManagement
+        open={isWaitlistManagementOpen}
+        onOpenChange={setIsWaitlistManagementOpen}
       />
     </div>
   );
