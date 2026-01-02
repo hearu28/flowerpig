@@ -39,9 +39,13 @@ export function CategoryTabs({
     });
   };
 
+  const handleValueChange = (value: string) => {
+    handleCategoryClick(value as MenuCategory);
+  };
+
   return (
     <div className="sticky top-0 z-40 bg-background border-b">
-      <Tabs value={activeCategory} onValueChange={handleCategoryClick}>
+      <Tabs value={activeCategory} onValueChange={handleValueChange}>
         <TabsList className="w-full h-14 grid grid-cols-5 gap-1 p-1">
           {categories.map((category) => (
             <TabsTrigger
